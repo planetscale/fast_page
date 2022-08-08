@@ -17,5 +17,5 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: sudo gem install license_finder && bundle install
+      - run: sudo gem install license_finder && gem install bundler && bundle install
       - run: license_finder

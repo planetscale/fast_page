@@ -1,0 +1,37 @@
+---
+- - :permit
+  - MIT
+  - :who:
+    :why:
+    :versions: []
+    :when: 2022-08-08 23:11:41.376081000 Z
+- - :permit
+  - Apache 2.0
+  - :who:
+    :why:
+    :versions: []
+    :when: 2022-08-08 23:11:44.981485000 Z
+- - :permit
+  - Simplified BSD
+  - :who:
+    :why:
+    :versions: []
+    :when: 2022-08-08 23:11:57.738120000 Z
+- - :permit
+  - New BSD
+  - :who:
+    :why:
+    :versions: []
+    :when: 2022-08-08 23:12:02.144182000 Z
+- - :approve
+  - json
+  - :who:
+    :why:
+    :versions: []
+    :when: 2022-08-08 23:13:04.483270000 Z
+- - :approve
+  - json
+  - :who:
+    :why:
+    :versions: []
+    :when: 2022-08-08 23:13:55.801826000 Z

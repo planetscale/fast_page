@@ -55,6 +55,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
+    pagy (5.10.1)
+      activesupport
     parallel (1.22.1)
     parser (3.1.2.1)
       ast (~> 2.4.1)
@@ -98,6 +100,7 @@ PLATFORMS
 DEPENDENCIES
   fast_page!
   kaminari (~> 1.2)
+  pagy (~> 5.10)
   pry
   rake (~> 13.0)
   rubocop (~> 1.7)

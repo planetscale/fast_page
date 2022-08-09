@@ -36,5 +36,7 @@ Gem::Specification.new do |spec|
   # guide at: https://bundler.io/guides/creating_gem.html
   spec.add_dependency "activerecord", "~> 6.0.0"
   spec.add_dependency "activesupport", "~> 6.0.0"
+  spec.add_development_dependency "kaminari", "~> 1.2"
+  spec.add_development_dependency "pry"
   spec.add_development_dependency "sqlite3"
 end

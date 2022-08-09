@@ -16,7 +16,7 @@ module FastPage
         return self
       end
 
-      @records = where(id: ids).limit(nil).offset(nil).load
+      @records = where(id: ids).unscope(:limit).unscope(:offset).load
       @loaded = true
 
       self

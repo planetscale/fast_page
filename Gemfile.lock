@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    fast_page (0.1.0)
-      activerecord (~> 6.0.0)
-      activesupport (~> 6.0.0)
+    fast_page (0.1.1)
+      activerecord
+      activesupport
 
 GEM
   remote: https://rubygems.org/

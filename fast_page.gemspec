@@ -31,8 +31,8 @@ Gem::Specification.new do |spec|
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
-  spec.add_dependency "activerecord", "~> 6.0.0"
-  spec.add_dependency "activesupport", "~> 6.0.0"
+  spec.add_dependency "activerecord"
+  spec.add_dependency "activesupport"
   spec.add_development_dependency "kaminari", "~> 1.2"
   spec.add_development_dependency "pagy", "~> 5.10"
   spec.add_development_dependency "pry"

@@ -20,3 +20,6 @@ Style/Documentation:
 
 Metrics/AbcSize:
   Enabled: false
+
+Layout/LineLength:
+  Enabled: false

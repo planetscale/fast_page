@@ -90,7 +90,7 @@ posts = posts.fast_page if params[:page] > 5
 ```
 
 ## Thank you :heart:
-This gem was inspired by Laravel's [`fast-paginate`](https://github.com/hammerstonedev/fast-paginate) and @aarondfrancis's excellent blog post: [Efficient Pagination Using Deferred Joins](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins).
+This gem was inspired by Laravel's [`fast-paginate`](https://github.com/hammerstonedev/fast-paginate) and [@aarondfrancis](https://github.com/aarondfrancis)'s excellent blog post: [Efficient Pagination Using Deferred Joins](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins).
 
 ## Contributing
 

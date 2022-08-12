@@ -25,6 +25,20 @@ Post.all.order(created_at: :desc).limit(25).offset(100).fast_page
 # Post Load (0.4ms)  SELECT `posts`.* FROM `posts` WHERE `posts`.`id` IN (1271528, 1271527, 1271526, 1271525, 1271524, 1271523, 1271522, 1271521, 1271520, 1271519, 1271518, 1271517, 1271516, 1271515, 1271514, 1271512, 1271513, 1271511, 1271510, 1271509, 1271508, 1271507, 1271506, 1271505, 1271504) ORDER BY `posts`.`created_at` DESC
 ```
 
+## Benchmarks
+We wanted to see just how much faster using the deferred join could be. We took a table with about ~1 million records in it and benchmarked the standard ActiveRecord offset/limit query vs the query with FastPage.
+
+Here is the query:
+```ruby
+AuditLogEvent.page(num).per(100).where(owner: org).order(created_at: :desc)
+```
+
+Both `owner` and `created_at` are indexed.
+
+<img src="https://user-images.githubusercontent.com/155044/184417061-f1f7df71-a263-4574-bbce-e5291bf330ed.png" width="1000px" alt="Graph of FastPage vs standard ActiveRecord performance"/>
+
+As you can see in the chart above, it's significantly faster the further into the table we paginate.
+
 ## Compatible pagination libraries
 `FastPage` has been tested and works with these existing popular pagination gems. If you try it with any other gems, please let us know!
 

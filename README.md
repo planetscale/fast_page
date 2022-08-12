@@ -12,7 +12,7 @@ gem 'fast_page'
 You can then use the `fast_page` method on any ActiveRecord::Relation that is using offset/limit.
 
 ### Example
-Here is a slow pagination query.
+Here is a slow pagination query:
 ```ruby
 Post.all.order(created_at: :desc).limit(25).offset(100)
 # Post Load (1228.7ms)  SELECT `posts`.* FROM `posts` ORDER BY `posts`.`created_at` DESC LIMIT 25 OFFSET 100
@@ -74,14 +74,14 @@ AS lim USING(id);
 
 Notice that we first select the ID of all the rows we want to show, then the data for those rows. This technique works "because it lets the server examine as little data as possible in an index without accessing rows."
 
-The FastPage gem makes it easy to apply this optimization to any ActiveRecord::Relation using offset/limit.
+The FastPage gem makes it easy to apply this optimization to any `ActiveRecord::Relation` using offset/limit.
 
-To learn more, check out this blog post: [Efficient Pagination Using Deferred Joins](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins)
+To learn more on how this works, check out this blog post: [Efficient Pagination Using Deferred Joins](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins)
 
 ## When should I use this?
-`fast_page` works best on pagination queries that include an `ORDER BY`. It becomes more effective as the page number increases. You should test it on your application to see how it improves your query times.
+`fast_page` works best on pagination queries that include an `ORDER BY`. It becomes more effective as the page number increases. You should test it on your application's data to see how it improves your query times.
 
-Because `fast_page` runs 2 queries instead of 1. It is very likely a bit slower for early pages. The benefits begin as the user gets into deeper pages. It's worth testing to see at which page your application gets faster from using `fast_page` & only applying to your queries then.
+Because `fast_page` runs 2 queries instead of 1, it is very likely a bit slower for early pages. The benefits begin as the user gets into deeper pages. It's worth testing to see at which page your application gets faster from using `fast_page` and only applying to your queries then.
 
 ```ruby
 posts = Post.all.page(params[:page]).per(25)
@@ -90,7 +90,7 @@ posts = posts.fast_page if params[:page] > 5
 ```
 
 ## Thank you :heart:
-This gem was inspired by Laravel's [`fast-paginate`](https://github.com/hammerstonedev/fast-paginate) and [@aarondfrancis](https://github.com/aarondfrancis)'s excellent blog post: [Efficient Pagination Using Deferred Joins](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins).
+This gem was inspired by [Hammerstone's `fast-paginate` for Laravel](https://github.com/hammerstonedev/fast-paginate) and [@aarondfrancis](https://github.com/aarondfrancis)'s excellent blog post: [Efficient Pagination Using Deferred Joins](https://aaronfrancis.com/2022/efficient-pagination-using-deferred-joins). We were so impressed with the results, we had to bring this to Rails as well.
 
 ## Contributing
 

@@ -1,5 +1,6 @@
-# FastPage
-`FastPage` applies the MySQL "deferred join" optimization to your ActiveRecord offset/limit queries. Potentially making your pagination much faster. ⚡️
+<img width="1280" alt="FastPage by PlanetScale" src="https://user-images.githubusercontent.com/6104/184650870-3c75026a-61bf-4a7b-8662-66ca910fdb94.png">
+
+**`FastPage` applies the MySQL "deferred join" optimization to your ActiveRecord offset/limit queries. Potentially making your pagination much faster. ⚡️**
 
 ## Usage
 
@@ -35,7 +36,7 @@ AuditLogEvent.page(num).per(100).where(owner: org).order(created_at: :desc)
 
 Both `owner` and `created_at` are indexed.
 
-<img src="https://user-images.githubusercontent.com/155044/184417061-f1f7df71-a263-4574-bbce-e5291bf330ed.png" width="1000px" alt="Graph of FastPage vs standard ActiveRecord performance"/>
+<img width="781" alt="Graph of FastPage vs standard ActiveRecord performance" src="https://user-images.githubusercontent.com/6104/184651344-9e3044a9-fda1-4f09-aa8b-58647063b282.png">
 
 As you can see in the chart above, it's significantly faster the further into the table we paginate.
 

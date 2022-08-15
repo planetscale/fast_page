@@ -1,6 +1,6 @@
 <img width="1280" alt="FastPage by PlanetScale" src="https://user-images.githubusercontent.com/6104/184650870-3c75026a-61bf-4a7b-8662-66ca910fdb94.png">
 
-**`FastPage` applies the MySQL "deferred join" optimization to your ActiveRecord offset/limit queries. Potentially making your pagination much faster. ⚡️**
+**`FastPage` applies the MySQL "deferred join" optimization to your ActiveRecord offset/limit queries.⚡️**
 
 ## Usage
 
@@ -95,6 +95,8 @@ To learn more on how this works, check out this blog post: [Efficient Pagination
 
 ## When should I use this?
 `fast_page` works best on pagination queries that include an `ORDER BY`. It becomes more effective as the page number increases. You should test it on your application's data to see how it improves your query times.
+
+We have only tested `fast_page` with MySQL. It likely does not produce the same results for other databases. If you test it, please let us know!
 
 Because `fast_page` runs 2 queries instead of 1, it is very likely a bit slower for early pages. The benefits begin as the user gets into deeper pages. It's worth testing to see at which page your application gets faster from using `fast_page` and only applying to your queries then.
 

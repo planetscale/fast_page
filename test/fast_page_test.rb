@@ -26,7 +26,7 @@ class FastPageTest < Minitest::Test
 
     User.all.limit(5).fast_page
 
-    assert_equal 2, count
+    assert_equal 1, count
 
     ActiveSupport::Notifications.unsubscribe("sql.active_record")
   end
@@ -40,9 +40,8 @@ class FastPageTest < Minitest::Test
 
     User.all.limit(5).fast_page
 
-    assert_equal 2, queries.size
-    assert_includes queries, 'SELECT "users"."id" FROM "users" LIMIT ?'
-    assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?, ?, ?)'
+    assert_equal 1, queries.size
+    assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (SELECT "users"."id" FROM "users" LIMIT ?)'
 
     ActiveSupport::Notifications.unsubscribe("sql.active_record")
   end
@@ -56,11 +55,10 @@ class FastPageTest < Minitest::Test
 
     User.all.includes(:organization).limit(50).fast_page
 
-    assert_equal 3, queries.size
+    assert_equal 2, queries.size
 
     # Organizations are not included on the ID query (not needed)
-    assert_includes queries, 'SELECT "users"."id" FROM "users" LIMIT ?'
-    assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (SELECT "users"."id" FROM "users" LIMIT ?)'
     # Includes are still loaded
     assert_includes queries, 'SELECT "organizations".* FROM "organizations" WHERE "organizations"."id" = ?'
 

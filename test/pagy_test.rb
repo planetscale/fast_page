@@ -47,11 +47,10 @@ class PagyTest < Minitest::Test
     assert_equal 1, pagy.page
     assert_equal 2, pagy.next
     assert_equal 5, records.size
-    assert_equal 3, queries.size
+    assert_equal 2, queries.size
 
     assert_includes queries, 'SELECT COUNT(*) FROM "users"'
-    assert_includes queries, 'SELECT "users"."id" FROM "users" LIMIT ? OFFSET ?'
-    assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?, ?, ?)'
+    assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (SELECT "users"."id" FROM "users" LIMIT ? OFFSET ?)'
 
     ActiveSupport::Notifications.unsubscribe("sql.active_record")
   end

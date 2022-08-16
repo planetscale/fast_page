@@ -8,15 +8,7 @@ module FastPage
 
       id_scope = dup
       id_scope = id_scope.except(:includes) unless references_eager_loaded_tables?
-      ids = id_scope.pluck(:id)
-
-      if ids.empty?
-        @records = []
-        @loaded = true
-        return self
-      end
-
-      @records = where(id: ids).unscope(:limit).unscope(:offset).load
+      @records = where(id: id_scope).unscope(:limit).unscope(:offset).load
       @loaded = true
 
       self

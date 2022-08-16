@@ -2,6 +2,8 @@
 
 **`FastPage` applies the MySQL "deferred join" optimization to your ActiveRecord offset/limit queries.⚡️**
 
+[![See on RubyGems](https://badge.fury.io/rb/fast_page.svg)](https://badge.fury.io/rb/fast_page)
+
 ## Usage
 
 Add `fast_page` to your Gemfile.

@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Blazing fast pagination for ActiveRecord with deferred joins "
   spec.description   = 'FastPage applies the MySQL "deferred join" optimization to your ActiveRecord offset/limit queries.'
   spec.homepage      = "https://github.com/planetscale/fast_page"
-  spec.license       = "MIT"
+  spec.license       = "Apache-2.0"
   spec.required_ruby_version = ">= 2.4.0"
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to 'https://mygemserver.com'"

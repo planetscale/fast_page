@@ -71,7 +71,8 @@ class FastPageTest < Minitest::Test
     og = User.all.limit(5).offset(5).order(created_at: :desc)
     fast = User.all.limit(5).offset(5).order(created_at: :desc).fast_page
 
-    assert_equal og, fast
+    assert_equal og.length, fast.length
+    assert_equal og.select(&:id), fast.select(&:id)
   end
 
   def test_errors_without_limit_or_offset
@@ -84,7 +85,8 @@ class FastPageTest < Minitest::Test
     og = User.all.limit(5).order(created_at: :desc)
     fast = User.all.limit(5).order(created_at: :desc).fast_page
 
-    assert_equal og, fast
+    assert_equal og.length, fast.length
+    assert_equal og.select(&:id), fast.select(&:id)
   end
 
   def test_works_offset_only

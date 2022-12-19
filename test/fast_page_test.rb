@@ -95,4 +95,8 @@ class FastPageTest < Minitest::Test
 
     assert_equal og, fast
   end
+
+  def test_to_a_returns_an_array
+    assert_equal Array, User.all.limit(5).fast_page.to_a.class
+  end
 end

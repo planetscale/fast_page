@@ -21,6 +21,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1.2
-          bundler-cache: true
+          bundler-cache: false
+      - run: bundle install
       - run: gem install license_finder
       - run: license_finder

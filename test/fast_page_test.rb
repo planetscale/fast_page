@@ -103,4 +103,12 @@ class FastPageTest < Minitest::Test
   def test_to_a_returns_an_array
     assert_equal Array, User.all.limit(5).fast_page.to_a.class
   end
+
+  def test_returns_unique_records_when_including_associations
+    og = User.includes(:organizations).where(organizations: { id: Organization.pluck(:id) }).limit(2).order(created_at: :asc)
+    fast = User.includes(:organizations).where(organizations: { id: Organization.pluck(:id) }).limit(2).order(created_at: :asc).fast_page
+
+    assert_equal og.length, fast.length
+    assert_equal og.select(&:id), fast.select(&:id)
+  end
 end

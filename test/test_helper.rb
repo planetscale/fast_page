@@ -16,9 +16,14 @@ ActiveRecord::Schema.define do
 
   create_table :users, force: true do |t|
     t.string :login
-    t.integer :organization_id
     t.timestamps
     t.index ["login"], unique: true
+  end
+
+  create_table :user_organizations, force: true do |t|
+    t.integer :user_id
+    t.integer :organization_id
+    t.timestamps
   end
 
   create_table :organizations, force: true do |t|
@@ -31,5 +36,5 @@ class Organization < ActiveRecord::Base
 end
 
 class User < ActiveRecord::Base
-  belongs_to :organization
+  has_and_belongs_to_many :organizations, join_table: "user_organizations"
 end

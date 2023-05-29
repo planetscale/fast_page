@@ -7,10 +7,13 @@ class FastPageTest < Minitest::Test
     User.delete_all
     Organization.delete_all
 
-    org = Organization.create(name: "planetscale")
-    User.create(login: "mikeissocool", organization: org)
-    User.create(login: "iheanyi")
-    User.create(login: "nicknicknick")
+    organizations = [
+      Organization.create(name: "planetscale"),
+      Organization.create(name: "github")
+    ]
+    User.create(login: "mikeissocool", organizations: [organizations[0], organizations[1]])
+    User.create(login: "iheanyi", organizations: [organizations[0], organizations[1]])
+    User.create(login: "nicknicknick", organizations: [organizations[0]])
     User.create(login: "frances")
     User.create(login: "phani")
     User.create(login: "jason")
@@ -54,15 +57,16 @@ class FastPageTest < Minitest::Test
       queries << sql.payload[:sql]
     end
 
-    User.all.includes(:organization).limit(50).fast_page
+    User.all.includes(:organizations).limit(50).fast_page
 
-    assert_equal 3, queries.size
+    assert_equal 4, queries.size
 
     # Organizations are not included on the ID query (not needed)
     assert_includes queries, 'SELECT "users"."id" FROM "users" LIMIT ?'
     assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     # Includes are still loaded
-    assert_includes queries, 'SELECT "organizations".* FROM "organizations" WHERE "organizations"."id" = ?'
+    assert_includes queries, 'SELECT "user_organizations".* FROM "user_organizations" WHERE "user_organizations"."user_id" IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    assert_includes queries, 'SELECT "organizations".* FROM "organizations" WHERE "organizations"."id" IN (?, ?)'
 
     ActiveSupport::Notifications.unsubscribe("sql.active_record")
   end

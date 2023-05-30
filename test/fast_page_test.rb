@@ -7,11 +7,14 @@ class FastPageTest < Minitest::Test
     User.delete_all
     Organization.delete_all
 
-    org = Organization.create(name: "planetscale")
-    User.create(login: "mikeissocool", organization: org)
-    User.create(login: "iheanyi")
-    User.create(login: "nicknicknick")
-    User.create(login: "frances")
+    organizations = [
+      Organization.create(name: "planetscale"),
+      Organization.create(name: "github")
+    ]
+    User.create(login: "mikeissocool", organizations: [organizations[0], organizations[1]])
+    User.create(login: "iheanyi", organizations: [organizations[0], organizations[1]])
+    User.create(login: "nicknicknick", organizations: [organizations[0]])
+    User.create(login: "frances", organizations: [organizations[1]])
     User.create(login: "phani")
     User.create(login: "jason")
     User.create(login: "derek")
@@ -54,15 +57,16 @@ class FastPageTest < Minitest::Test
       queries << sql.payload[:sql]
     end
 
-    User.all.includes(:organization).limit(50).fast_page
+    User.all.includes(:organizations).limit(50).fast_page
 
-    assert_equal 3, queries.size
+    assert_equal 4, queries.size
 
     # Organizations are not included on the ID query (not needed)
     assert_includes queries, 'SELECT "users"."id" FROM "users" LIMIT ?'
     assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     # Includes are still loaded
-    assert_includes queries, 'SELECT "organizations".* FROM "organizations" WHERE "organizations"."id" = ?'
+    assert_includes queries, 'SELECT "user_organizations".* FROM "user_organizations" WHERE "user_organizations"."user_id" IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    assert_includes queries, 'SELECT "organizations".* FROM "organizations" WHERE "organizations"."id" IN (?, ?)'
 
     ActiveSupport::Notifications.unsubscribe("sql.active_record")
   end
@@ -98,5 +102,13 @@ class FastPageTest < Minitest::Test
 
   def test_to_a_returns_an_array
     assert_equal Array, User.all.limit(5).fast_page.to_a.class
+  end
+
+  def test_returns_unique_records_when_including_associations
+    og = User.includes(:organizations).where(organizations: { id: Organization.pluck(:id) }).limit(2).order(created_at: :asc)
+    fast = User.includes(:organizations).where(organizations: { id: Organization.pluck(:id) }).limit(2).order(created_at: :asc).fast_page
+
+    assert_equal og.length, fast.length
+    assert_equal og.select(&:id), fast.select(&:id)
   end
 end

@@ -11,7 +11,7 @@ module FastPage
       @values[:limit] = limit_value + 1 if limit_value
       id_scope = dup
       id_scope = id_scope.except(:includes) unless references_eager_loaded_tables?
-      ids = id_scope.pluck(:id)
+      ids = id_scope.pluck(:id).uniq
 
       if limit_value
         @values[:limit] = limit_value - 1

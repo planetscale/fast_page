@@ -14,7 +14,7 @@ class FastPageTest < Minitest::Test
     User.create(login: "mikeissocool", organizations: [organizations[0], organizations[1]])
     User.create(login: "iheanyi", organizations: [organizations[0], organizations[1]])
     User.create(login: "nicknicknick", organizations: [organizations[0]])
-    User.create(login: "frances")
+    User.create(login: "frances", organizations: [organizations[1]])
     User.create(login: "phani")
     User.create(login: "jason")
     User.create(login: "derek")

@@ -25,9 +25,19 @@ ActiveRecord::Schema.define do
     t.string :name
     t.timestamps
   end
+
+  create_table :accounts, id: false, force: true do |t|
+    t.integer :account_id, primary_key: true
+    t.string :name
+    t.timestamps
+  end
 end
 
 class Organization < ActiveRecord::Base
+end
+
+class Account < ActiveRecord::Base
+  self.primary_key = :account_id
 end
 
 class User < ActiveRecord::Base

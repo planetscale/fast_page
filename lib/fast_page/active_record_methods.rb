@@ -11,7 +11,7 @@ module FastPage
       @values[:limit] = limit_value + 1 if limit_value
       id_scope = dup
       id_scope = id_scope.except(:includes) unless references_eager_loaded_tables?
-      ids = id_scope.pluck(:id)
+      ids = id_scope.pluck(primary_key)
 
       if limit_value
         @values[:limit] = limit_value - 1
@@ -26,7 +26,7 @@ module FastPage
         return self
       end
 
-      @records = where(id: ids).unscope(:limit).unscope(:offset).load.records
+      @records = where(primary_key => ids).unscope(:limit).unscope(:offset).load.records
       @loaded = true
 
       self

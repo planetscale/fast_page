@@ -6,6 +6,7 @@ class FastPageTest < Minitest::Test
   def setup
     User.delete_all
     Organization.delete_all
+    Account.delete_all
 
     org = Organization.create(name: "planetscale")
     User.create(login: "mikeissocool", organization: org)
@@ -18,6 +19,9 @@ class FastPageTest < Minitest::Test
     User.create(login: "dgraham")
     User.create(login: "ayrton")
     User.create(login: "dbussink")
+
+    Account.create(account_id: 1, name: "planetscale")
+    Account.create(account_id: 2, name: "mikeissocool")
   end
 
   def test_executes_extra_id_query
@@ -43,6 +47,22 @@ class FastPageTest < Minitest::Test
     assert_equal 2, queries.size
     assert_includes queries, 'SELECT "users"."id" FROM "users" LIMIT ?'
     assert_includes queries, 'SELECT "users".* FROM "users" WHERE "users"."id" IN (?, ?, ?, ?, ?)'
+
+    ActiveSupport::Notifications.unsubscribe("sql.active_record")
+  end
+
+  def test_correct_for_accounts_sql
+    queries = []
+
+    ActiveSupport::Notifications.subscribe("sql.active_record") do |sql|
+      queries << sql.payload[:sql]
+    end
+
+    Account.all.limit(2).fast_page
+
+    assert_equal 2, queries.size
+    assert_includes queries, 'SELECT "accounts"."account_id" FROM "accounts" LIMIT ?'
+    assert_includes queries, 'SELECT "accounts".* FROM "accounts" WHERE "accounts"."account_id" IN (?, ?)'
 
     ActiveSupport::Notifications.unsubscribe("sql.active_record")
   end

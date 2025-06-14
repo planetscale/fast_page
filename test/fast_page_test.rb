@@ -119,4 +119,53 @@ class FastPageTest < Minitest::Test
   def test_to_a_returns_an_array
     assert_equal Array, User.all.limit(5).fast_page.to_a.class
   end
+
+  def test_subquery_alias_ordering_fixed
+    # This test verifies the fix for GitHub issue #12
+    # where ordering by a subquery alias used to fail with fast_page
+    #
+    # Create a query that uses a subquery with an alias in ORDER BY
+    # This simulates: SELECT users.*, (SELECT COUNT(*) FROM organizations WHERE organizations.id = users.organization_id) AS org_count FROM users ORDER BY org_count
+    relation = User.select("users.*, (SELECT COUNT(*) FROM organizations WHERE organizations.id = users.organization_id) AS org_count")
+                   .order("org_count ASC")
+                   .limit(5)
+
+    # The original query should work fine
+    original_result = relation.to_a
+
+    # Now fast_page should also work without errors
+    fast_page_result = relation.fast_page.to_a
+
+    # Both queries should return the same results
+    assert_equal original_result.length, fast_page_result.length
+    assert_equal original_result.map(&:id), fast_page_result.map(&:id)
+
+    # Verify that the subquery alias is preserved in the results
+    original_result.each_with_index do |record, index|
+      assert_equal record.org_count, fast_page_result[index].org_count
+    end
+  end
+
+  def test_alias_detection_logic
+    # Test that alias detection works correctly for different scenarios
+
+    # Regular column ordering should not trigger alias detection
+    regular_relation = User.order("login ASC").limit(5)
+    fast_page_regular = regular_relation.fast_page
+    refute fast_page_regular.send(:order_references_select_aliases?), "Regular column ordering should not be detected as alias"
+
+    # Alias ordering should trigger alias detection
+    alias_relation = User.select("users.*, (SELECT COUNT(*) FROM organizations WHERE organizations.id = users.organization_id) AS org_count")
+                         .order("org_count ASC")
+                         .limit(5)
+    fast_page_alias = alias_relation.fast_page
+    assert fast_page_alias.send(:order_references_select_aliases?), "Alias ordering should be detected"
+
+    # Mixed ordering (real column + alias) should trigger alias detection
+    mixed_relation = User.select("users.*, (SELECT COUNT(*) FROM organizations WHERE organizations.id = users.organization_id) AS org_count")
+                         .order("login ASC, org_count DESC")
+                         .limit(5)
+    fast_page_mixed = mixed_relation.fast_page
+    assert fast_page_mixed.send(:order_references_select_aliases?), "Mixed ordering with aliases should be detected"
+  end
 end
